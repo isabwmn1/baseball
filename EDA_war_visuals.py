@@ -77,7 +77,6 @@ def plot_team_war_2019(df):
     ax.set_xlabel("Teams")
     ax.set_ylabel("Total WAR")
 
-
     plt.savefig("team_war_2019_bargraph.png", dpi=300, bbox_inches="tight")
     plt.show()
 
