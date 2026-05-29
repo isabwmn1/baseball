@@ -118,25 +118,27 @@ def get_label_data(year: int) -> pd.DataFrame:
 
 def main():
     '''Main function documentation'''
-    '''
+
     years = [1998, *range(2004, 2020), *range(2023, 2026)]
     Path("features").mkdir(exist_ok=True)
     Path("labels").mkdir(exist_ok=True)
 
     for year in years:
         df_feat = get_training_data(year)
-        df_feat.to_csv(f'features/feature_{year}.csv')
+        df_feat.to_csv(f'feats/feature_{year}.csv')
 
         df_label = get_label_data(year)
         df_label.to_csv(f'labels/label_{year}.csv')
-    '''
-    folders = ['features', 'labels']
+
+    folders = ['feats', 'labels']
 
     for data_folder in folders:
         folder = Path(data_folder)
         df = pd.concat([pd.read_csv(file) for file in folder.glob("*.csv")],
                        ignore_index=True)
-        df.to_csv(data_folder + "/combined.csv", index=False)
+        df.to_csv(data_folder + "/combined_" + data_folder + ".csv",
+                  index=False
+                  )
 
 
 if __name__ == '__main__':

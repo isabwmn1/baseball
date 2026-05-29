@@ -11,7 +11,9 @@ from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 
 
-def prep_features(data_path: str = 'features/combined.csv') -> pd.DataFrame:
+def prep_features(
+        data_path: str = 'features/combined_feats.csv'
+        ) -> pd.DataFrame:
     '''Feat prep docstring'''
 
     # Manipulating feature data to be fed to regressor
@@ -51,7 +53,7 @@ def prep_features(data_path: str = 'features/combined.csv') -> pd.DataFrame:
     return team_feats
 
 
-def prep_labels(data_path: str = 'labels/combined.csv') -> pd.DataFrame:
+def prep_labels(data_path: str = 'labels/combined_labels.csv') -> pd.DataFrame:
     '''Label prep docstring'''
 
     # Manipulating label data to be fed to regressor
