@@ -28,7 +28,7 @@ based statistics (i.e. batting statistics for batter) develop a more accurate mo
 
 -- Languages/Libraries Used --
 - Python
-- PyTorch
+- Scikit-learn
 - pybaseball
 - pandas, numpy, matplotlib
 - Jupyter Notebook (for visualization)
