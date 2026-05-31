@@ -1,4 +1,5 @@
 '''
+Isabelle Bowman, Kyle Chung, Jamie Stenwick
 Machine learning framework for WAR statistic.
 Assumed linear regression fit based off off
 data visualization in exploratory data analysis.
@@ -130,6 +131,8 @@ def evaluate_model(test_label, test_pred, model_name):
     print("Mean Squared Error:", round(mse, 3))
     print("Root Mean Squared Error:", round(rmse, 3))
 
+    return rmse, r2
+
 
 def make_results_table(test, test_pred):
     '''
@@ -182,7 +185,7 @@ def plot_results(results):
     plt.show()
 
 
-def plot_linear_results(test_label, linear_pred):
+def plot_linear_results(test_label, linear_pred, type, r2, rmse):
     '''
     plot_linear_results function creates a scatter plot
     of true wins vs. linear regression predicted wins with
@@ -205,10 +208,21 @@ def plot_linear_results(test_label, linear_pred):
              color="orange", linewidth=3,
              label="Ideal")
 
+    # adding textbox for R^2 and RMSE values
+    textbox = (f"R² = {r2:.3f}\n" f"RMSE = {rmse:.3f}")
+
+    plt.text(0.05, 0.90, textbox, transform=plt.gca().transAxes,
+             fontsize=11, verticalalignment='top', bbox=dict(
+                 boxstyle='round',
+                 facecolor='white',
+                 edgecolor='black',
+                 linewidth=1.5,
+                 alpha=0.8))
+
     # Labelling etc.
     plt.xlabel("True Wins")
     plt.ylabel("Predicted Wins")
-    plt.title("Linear Regression: True vs. WAR-Predicted Wins (2019)")
+    plt.title(f"{type}: True vs. WAR-Predicted Wins (2019)")
     plt.legend()
     plt.show()
 
@@ -228,36 +242,43 @@ def main():
     linear_model, test, test_label, linear_pred = train_linear_model(df)
 
     # Evaluating model
-    evaluate_model(test_label, linear_pred, "Linear Regression Performance")
+    rmse, r2 = evaluate_model(test_label, linear_pred,
+                              "Linear Regression Performance")
 
     # Results table
     linear_results = make_results_table(test, linear_pred)
 
     # Plotting
     plot_results(linear_results)
-    plot_linear_results(test_label, linear_pred)
+    plot_linear_results(test_label, linear_pred, "Linear Regression", r2, rmse)
 
     # -------------
     # DECISION TREE MODEL
     # -------------
     tree_model, test, test_label, tree_pred = train_tree_model(df)
 
-    evaluate_model(test_label, tree_pred, "Decision Tree Performance")
+    rmse, r2 = evaluate_model(test_label, tree_pred,
+                              "Decision Tree Performance")
 
     tree_results = make_results_table(test, tree_pred)
 
     plot_results(tree_results)
+    plot_linear_results(test_label, tree_pred, "Decision Tree Regression",
+                        r2, rmse)
 
     # -------------
     # RANDOM FOREST MODEL
     # -------------
     forest_model, test, test_label, forest_pred = train_forest_model(df)
 
-    evaluate_model(test_label, forest_pred, "Random Forest Performance")
+    rmse, r2 = evaluate_model(test_label, forest_pred,
+                              "Random Forest Performance")
 
     forest_results = make_results_table(test, forest_pred)
 
     plot_results(forest_results)
+    plot_linear_results(test_label, forest_pred, "Random Forest Regression",
+                        r2, rmse)
 
 
 if __name__ == "__main__":
