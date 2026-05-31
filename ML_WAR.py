@@ -43,6 +43,13 @@ def train_linear_model(df):
     model = LinearRegression()
     model.fit(train_feature, train_label)
 
+    # Get model equation
+    intercept = model.intercept_
+    coefficients = model.coef_
+
+    print(f"Intercept: {intercept}")
+    print(f"Coefficients: {coefficients}")
+
     # Predictions
     test_pred = model.predict(test_feature)
 
