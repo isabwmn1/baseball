@@ -15,7 +15,7 @@ based statistics (i.e. batting statistics for batter) develop a more accurate mo
   5 seasons, 4 season to be used as training data and 1 to be used as testing data
 - Write code to obtain dataset using pybaseball, and clean and structure dataset for analysis
 - Aggregate player statistics into team-level features
-- Build and train a machine learning model using Pytorch
+- Build and train a machine learning model using Scikit-learn
 - Predict team success metrics
 - Create visualizations to communicate findings
 
