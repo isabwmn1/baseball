@@ -12,7 +12,9 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 
 # Loading CSV file as pd.DataFrame
@@ -120,6 +122,40 @@ def train_forest_model(df):
     return model, test, test_label, test_pred
 
 
+def train_world_series(df):
+    '''
+    train_world_series function predicts whether a team wins the
+    World Series using the batting and pitching WAR. Trains on
+    2010-2018 data and tests on 2019 data.
+
+    won_world_series:
+    0 = did not win World Series
+    1 = won World Series
+    '''
+
+    # Training on 2010 - 2018
+    train = df[df["year_ID"] < 2019]
+
+    # Testing on 2019
+    test = df[df["year_ID"] == 2019]
+
+    # Setting features and labels
+    train_feature = train[["WAR_bat", "WAR_pitch"]]
+    train_label = train["won_world_series"]
+
+    test_feature = test[["WAR_bat", "WAR_pitch"]]
+    test_label = test["won_world_series"]
+
+    # Setting model as Logistic Regression
+    model = LogisticRegression(class_weight="balanced", random_state=42)
+
+    # Training model
+    model.fit(train_feature, train_label)
+    test_pred = model.predict(test_feature)
+
+    return model, test, test_label, test_pred
+
+
 def evaluate_model(test_label, test_pred, model_name):
     '''
     evaluate_model function statistically tests accuracy of
@@ -139,6 +175,25 @@ def evaluate_model(test_label, test_pred, model_name):
     print("Root Mean Squared Error:", round(rmse, 3))
 
     return rmse, r2
+
+
+def evaluate_world_series_model(test_label, test_pred):
+    '''
+    Evaluates logistic regression classifier.
+    '''
+
+    accuracy = accuracy_score(test_label, test_pred)
+
+    matrix = confusion_matrix(test_label, test_pred)
+
+    print("World Series Prediction Performance")
+    print("----------------------------------")
+    print("Accuracy:", round(accuracy, 3))
+    print()
+    print("Confusion Matrix:")
+    print(matrix)
+
+    return accuracy, matrix
 
 
 def make_results_table(test, test_pred):
@@ -234,6 +289,54 @@ def plot_linear_results(test_label, linear_pred, type, r2, rmse):
     plt.show()
 
 
+def make_world_series_table(test, test_pred):
+    '''
+    Creates DataFrame containing actual and
+    predicted World Series outcomes.
+    '''
+
+    results = test[
+        ["team_ID", "won_world_series"]
+    ].copy()
+
+    results["Predicted_WS_Win"] = test_pred
+
+    print()
+    print("World Series Results")
+    print("--------------------")
+    print(results)
+
+
+def plot_confusion_matrix(matrix):
+    '''
+    plot_confusion_matrix plots a matrix comparing points
+    predicted labels and true labels.
+    '''
+
+    plt.figure(figsize=(5, 5))
+
+    plt.imshow(matrix)
+
+    plt.colorbar()
+
+    plt.xticks([0, 1], ["No WS", "Won WS"])
+
+    plt.yticks([0, 1], ["No WS", "Won WS"])
+
+    for i in range(matrix.shape[0]):
+        for j in range(matrix.shape[1]):
+            plt.text(j, i, str(matrix[i, j]), ha="center", va="center",
+                     color="black", fontsize=12, fontweight="bold")
+
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+
+    plt.title("World Series Confusion Matrix")
+
+    plt.tight_layout()
+    plt.show()
+
+
 # Main function
 def main():
     filename = "WAR_2010_2019.csv"
@@ -286,6 +389,17 @@ def main():
     plot_results(forest_results)
     plot_linear_results(test_label, forest_pred, "Random Forest Regression",
                         r2, rmse)
+
+    # ------------------------
+    # WORLD SERIES MODEL
+    # ------------------------
+    _, test, test_label, test_pred = train_world_series(df)
+
+    accuracy, matrix = evaluate_world_series_model(test_label, test_pred)
+
+    make_world_series_table(test, test_pred)
+
+    plot_confusion_matrix(matrix)
 
 
 if __name__ == "__main__":
