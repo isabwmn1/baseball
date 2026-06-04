@@ -45,7 +45,8 @@ def get_WAR_data(start_year: int, stop_year: int) -> tuple[pd.DataFrame,
 def get_wins(year_start: int, year_end: int) -> pd.DataFrame:
     """
     Given a start and end year, returns the roster win data for the years
-    between the two (inclusive).
+    between the two (inclusive). Additionally, adds a column indicating whether
+    a team won the world series in that given year.
 
     The season team wins data and WAR roster data use different naming schemes
     for team labels. This function formats the wins dataset's team names to be
@@ -109,8 +110,22 @@ def get_wins(year_start: int, year_end: int) -> pd.DataFrame:
     # Converting team IDs to new column
     wins['team_ID'] = wins['Tm'].map(team_name_to_abbr)
 
-    # Removing old wins column
+    # Removing old wins team column
     wins = wins.drop(columns='Tm')
+
+    # Adding wins data
+    # Loading World Series winners
+    world_series_winners = pd.read_csv('world_series_winners.csv')
+    world_series_winners['won_world_series'] = 1
+
+    wins = wins.merge(world_series_winners,
+                      left_on=['year_ID', 'team_ID'],
+                      right_on=['year', 'winner'],
+                      how='left')
+
+    wins['won_world_series'] = wins['won_world_series'].fillna(0).astype(int)
+    wins = wins.drop(columns=['year', 'winner'])
+
     return wins
 
 
