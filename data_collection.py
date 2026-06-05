@@ -129,7 +129,7 @@ def main():
     and each are combined into dataframes.'''
 
     years = [1998, *range(2004, 2020), *range(2023, 2026)]
-    Path("features").mkdir(exist_ok=True)
+    Path("feats").mkdir(exist_ok=True)
     Path("labels").mkdir(exist_ok=True)
 
     for year in years:
