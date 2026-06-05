@@ -1,5 +1,13 @@
 '''
 Isabelle Bowman, Kyle Chung, Jamie Stenwick
+This is the executable python file for scraping the data
+that was used for the analysis in our Final Project report
+and also names the data in the same way it's used in analysis.py.
+This scrapes a year of data at a time, first getting all players
+on every team's roster at the start of the season and then
+appending all of their stats to a dataframe, and then combines
+all the yearly dataframes into one combined dataframe. Also the
+scraping takes about an hour and a half.
 '''
 import pandas as pd
 import requests
@@ -78,9 +86,6 @@ def get_training_data(year: int) -> pd.DataFrame:
 
     stats_df = pd.DataFrame(stat_rows)
 
-    print(stats_df.columns)
-    print(stats_df[['id', 'team', 'year', 'group']].head())
-
     return stats_df
 
 
@@ -102,7 +107,6 @@ def get_label_data(year: int) -> pd.DataFrame:
     team_rows: list[dict] = []
 
     for team in record_dict:
-        print(int(team))
         team_dict = {}
 
         team_dict['year'] = year
@@ -117,7 +121,12 @@ def get_label_data(year: int) -> pd.DataFrame:
 
 
 def main():
-    '''Main function documentation'''
+    '''First establishes the years you want to get data for,
+    the API formatting tends to change over time, so with
+    our somewhat non-robust method the years listed here are
+    what it works for in recent history. After establishing
+    years the features and labels are collected into folders
+    and each are combined into dataframes.'''
 
     years = [1998, *range(2004, 2020), *range(2023, 2026)]
     Path("features").mkdir(exist_ok=True)
