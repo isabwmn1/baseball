@@ -1,4 +1,7 @@
-'''Isabelle Bowman, Kyle Chung, Jamie Stenwick'''
+'''Isabelle Bowman, Kyle Chung, Jamie Stenwick
+This is the executable python file for generating
+visualizations of the 3 regression algorithms used for
+analyzing the combined dataframes created in data_collection.'''
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor
@@ -12,9 +15,11 @@ from sklearn.model_selection import train_test_split
 
 
 def prep_features(
-        data_path: str = 'features/combined_feats.csv'
+        data_path: str = 'feats/combined_feats.csv'
         ) -> pd.DataFrame:
-    '''Feat prep docstring'''
+    '''Filters down the original combined dataframe to just the features
+    we care about for our model creation, that being ops, era, ip, pa,
+    and veteran status. Also normalizes by playing volume.'''
 
     # Manipulating feature data to be fed to regressor
     df_features = pd.read_csv(data_path)
@@ -54,7 +59,8 @@ def prep_features(
 
 
 def prep_labels(data_path: str = 'labels/combined_labels.csv') -> pd.DataFrame:
-    '''Label prep docstring'''
+    '''Prepares the original combined labels dataframe, which only
+    requires setting the index to match the features dataframe.'''
 
     # Manipulating label data to be fed to regressor
     df_labels = pd.read_csv(data_path)
@@ -69,13 +75,14 @@ def prep_labels(data_path: str = 'labels/combined_labels.csv') -> pd.DataFrame:
 def analyze_model(feats: pd.DataFrame, labels: pd.DataFrame,
                   algo: str = 'gpr'
                   ) -> None:
-    '''ML docstring'''
+    '''Takes in a features and labels dataframes as input,
+    the indices must match, splits them into 80/20 train/test
+    split, and then makes a plot for either gaussian process reg,
+    random forest, or ridge regression, showing the mean absolute
+    error, and how strongly the predicted labels match the truth.'''
 
     feats = feats.dropna()
     labels = labels.loc[feats.index]
-
-    # Make sure the data matches up, and define training and testing data
-    assert feats.index.equals(labels.index)
 
     feats_arr = feats.to_numpy()
     labels_arr = labels.to_numpy().ravel()
@@ -136,7 +143,9 @@ def analyze_model(feats: pd.DataFrame, labels: pd.DataFrame,
 
 
 def main():
-    '''Main function documentation'''
+    '''First prepares the combined features and
+    labels dataframes for analysis and then makes
+    a plot for each ML algorithm.'''
 
     features = prep_features()
     labels = prep_labels()
