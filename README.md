@@ -44,6 +44,7 @@ based statistics (i.e. batting statistics for batter) develop a more accurate mo
 
 
 -- Procedure to Reproduce Results --
-1. First, make sure the required libraries are installed. Scikit-learn, pybaseball, pandas, numpy, matplotlib, and requests (for the webscraping data_collection.py) are necessary. Additionally, make sure the "world_series_winners.csv" file is downloaded for future use. This is the only CSV file you intially need before running code.
-2. Run the get_WAR_data.py and data_collection.py scripts. These scripts will acquire the necessary datasets needed for the ML portion, and will do it automatically.
+1. First, make sure the required libraries are installed. Scikit-learn, pybaseball, pandas, numpy, matplotlib, and requests (for the webscraping data_collection.py) are necessary. For CSE 163, all libraries except the pybaseball library are included in the base class environment. Pybaseball can be installed by running "pip install pybaseball".
+Additionally, make sure the "world_series_winners.csv" file is downloaded for future use. This is the only CSV file you intially need before running code (It is specifically implemented in the get_WAR_data.py file).
+2. Run the get_WAR_data.py and data_collection.py scripts. These scripts will acquire the necessary datasets needed for the ML portion, and will do it without any further input.
 3. Run the analysis.py and ML_WAR.py. These scripts will train and test the machine learning models and output the necessary graphs showing the results, in the png files detailed above.
