@@ -41,10 +41,12 @@ based statistics (i.e. batting statistics for batter) develop a more accurate mo
 - analysis.py: Uses the outputted files from data_collection.py to train and test machine learning models on the data. This script first revises the datasets to only include desired statistics, splits the data into train and test datasets, then trains and tests 3 different machine learning models on the data. The outputs of these models' predictions vs real win data is plotted, and these plots are saved as rf_analysis.png, ridge_analysis.png, and gpr_analysis.png
 - ML_WAR.py: Uses the outputted dataset from get_WAR_data.py and trains multiple different machine learning models using the data. Also, it tests the models' accuracy when using WAR data to predict the number of wins, and plots the predicted wins against the actual wins for each model. Plots are saved as decision_tree_WAR.png, linear_regression_WAR.png, and random_forest_WAR.png. Additionally, trains and tests a model to calculate how good of a metric WAR is for predicting the world series winner. A confusion matrix for this model is stored in the file 
 - EDA_war_visuals.py: Used for the EDA milestone of this final project. Uses the initial batter and pitcher WAR datasets for exploratory data analysis plots.
+- test_get_WAR_data.py: Tests whether the get_WAR_data.py function returns data for the correct years only.
 
 
 -- Procedure to Reproduce Results --
 1. First, make sure the required libraries are installed. Scikit-learn, pybaseball, pandas, numpy, matplotlib, and requests (for the webscraping data_collection.py) are necessary. For CSE 163, all libraries except the pybaseball library are included in the base class environment. Pybaseball can be installed by running "pip install pybaseball".
 Additionally, make sure the "world_series_winners.csv" file is downloaded for future use. This is the only CSV file you intially need before running code (It is specifically implemented in the get_WAR_data.py file).
 2. Run the get_WAR_data.py and data_collection.py scripts. These scripts will acquire the necessary datasets needed for the ML portion, and will do it without any further input.
-3. Run the analysis.py and ML_WAR.py. These scripts will train and test the machine learning models and output the necessary graphs showing the results, in the png files detailed above.
+    NOTE: The data_collection.py script took us over an hour to run. It may be better to just import the combined_feats.csv and combined_labels.csv file in order to skip this long wait.
+4. Run the analysis.py and ML_WAR.py. These scripts will train and test the machine learning models and output the necessary graphs showing the results, in the png files detailed above.
